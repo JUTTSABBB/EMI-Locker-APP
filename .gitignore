@@ -1,0 +1,21 @@
+# ---- Android / Gradle ----
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/.idea/
+android/captures/
+*.iml
+.DS_Store
+
+# ---- Keystores / secrets (NEVER commit these) ----
+*.jks
+*.keystore
+android/app/google-services.json
+**/serviceAccountKey.json
+
+# ---- Node server ----
+server/node_modules/
+server/.env
+server/data/*.db
+server/data/*.db-*
