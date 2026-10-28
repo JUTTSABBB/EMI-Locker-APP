@@ -9,4 +9,10 @@
 
     <string name="status_not_owner">Not enrolled yet</string>
     <string name="status_not_owner_detail">This app is installed but is not yet the device owner. Enrollment is done by the shop during phone setup (QR provisioning).</string>
+
+    <string name="status_active">Active · Up to date</string>
+    <string name="status_active_detail">Your installment plan is up to date. The phone is working normally.</string>
+
+    <string name="status_locked">Locked · EMI not paid</string>
+    <string name="status_locked_detail">Your installment has not been paid. Amount due: PKR %1$d. Pay now to unlock. For help call %2$s.</string>
 </resources>

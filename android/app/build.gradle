@@ -10,8 +10,14 @@ android {
         applicationId "com.ozzun.emilocker"
         minSdk 24          // Android 7.0 — needed for modern Device Owner / Lock Task APIs
         targetSdk 35
-        versionCode 1
-        versionName "0.1.0"
+        versionCode 2
+        versionName "0.2.0"
+
+        // Base URL of the Cloudflare Worker backend. Set it with a Gradle property
+        // (-PworkerUrl=https://emi-api.<you>.workers.dev) or an env var WORKER_URL.
+        // Empty by default so the app builds anywhere; when empty the app shows "not connected".
+        def workerUrl = project.findProperty("workerUrl") ?: System.getenv("WORKER_URL") ?: ""
+        buildConfigField "String", "WORKER_URL", "\"${workerUrl}\""
     }
 
     buildTypes {
@@ -35,6 +41,7 @@ android {
 
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
 }
 

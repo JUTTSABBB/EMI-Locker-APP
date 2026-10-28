@@ -19,3 +19,13 @@ server/node_modules/
 server/.env
 server/data/*.db
 server/data/*.db-*
+
+# ---- Secrets: NEVER commit these ----
+**/serviceAccountKey.json
+**/service-account*.json
+worker/.dev.vars
+worker/.wrangler/
+*.pem
+.env
+.env.*
+google-services.json

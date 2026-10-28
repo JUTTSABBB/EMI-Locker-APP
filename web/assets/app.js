@@ -1,8 +1,15 @@
 /* Renders dashboard views from EMIData. Pure client-side; swap EMIData for Firestore later. */
 (function () {
-  const { PKR, accounts, staff, collectionsByMonth, derive, summary } = window.EMIData;
-  const S = summary();
   const $ = s => document.querySelector(s);
+  // Guard the dashboard: when Firebase is configured, require a signed-in user.
+  if (window.FB && window.FB.configured) {
+    window.FB.onAuth(user => { if (!user) location.replace('index.html'); });
+  }
+  window.EMIData.load().then(boot);
+
+  function boot(D) {
+  const { PKR, accounts, staff, collectionsByMonth, derive, summary } = D;
+  const S = summary();
 
   /* inline icons (lucide-style) */
   const I = {
@@ -209,4 +216,5 @@
   $('#hamburger').addEventListener('click',()=>app.classList.toggle('nav-open'));
   $('#overlay').addEventListener('click',closeDrawer);
   show((location.hash||'#overview').slice(1));
+  } // end boot
 })();

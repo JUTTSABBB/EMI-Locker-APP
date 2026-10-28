@@ -1,0 +1,14 @@
+name = "emi-api"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+
+# Public, non-secret configuration. Replace the placeholders at setup.
+[vars]
+PROJECT_ID       = "ozzun-emi-locker"
+FIREBASE_API_KEY = ""                                   # public Firebase web API key
+ALLOWED_ORIGIN   = "https://ozzun-emi-locker.web.app,https://ozzun-emi-locker.firebaseapp.com"
+GRACE_DAYS       = "3"
+MAX_OFFLINE_DAYS = "7"
+
+# SECRET — never written here. Set once with:
+#   wrangler secret put FIREBASE_SERVICE_ACCOUNT   (paste the service-account JSON)

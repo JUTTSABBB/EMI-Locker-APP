@@ -1,0 +1,48 @@
+name: Deploy Firebase (hosting + rules)
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'web/**'
+      - 'firebase.json'
+      - 'firestore.rules'
+      - 'firestore.indexes.json'
+      - '.github/workflows/firebase-deploy.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Runs only once the FIREBASE_SERVICE_ACCOUNT secret is set (no red failures before setup).
+      - name: Check for deploy secret
+        id: guard
+        env:
+          SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          if [ -n "$SA" ]; then echo "ready=true" >> "$GITHUB_OUTPUT";
+          else echo "ready=false" >> "$GITHUB_OUTPUT"; echo "::notice::FIREBASE_SERVICE_ACCOUNT not set yet — skipping deploy."; fi
+
+      - name: Write service account
+        if: steps.guard.outputs.ready == 'true'
+        env:
+          SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: printf '%s' "$SA" > "$RUNNER_TEMP/sa.json"
+
+      - name: Set up Node
+        if: steps.guard.outputs.ready == 'true'
+        uses: actions/setup-node@v4
+        with: { node-version: '20' }
+
+      - name: Deploy hosting + Firestore rules
+        if: steps.guard.outputs.ready == 'true'
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/sa.json
+          PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
+        run: |
+          npm i -g firebase-tools
+          firebase deploy --only hosting,firestore:rules,firestore:indexes \
+            --project "${PROJECT_ID:-ozzun-emi-locker}" --non-interactive

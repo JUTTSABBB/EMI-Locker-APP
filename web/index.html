@@ -68,11 +68,41 @@
         <label class="remember"><input type="checkbox" checked/> Remember me</label>
         <a>Forgot password?</a>
       </div>
-      <button class="signin">Sign in to dashboard</button>
+      <button class="signin" id="signinBtn">Sign in to dashboard</button>
+      <div id="authErr" style="color:#b42121;font-size:12.5px;margin-top:10px;display:none"></div>
       <div class="divider">or</div>
-      <button class="google"><span style="font-weight:800;color:#4285F4">G</span> Continue with Google</button>
+      <button class="google" id="googleBtn"><span style="font-weight:800;color:#4285F4">G</span> Continue with Google</button>
       <div class="note">Accounts are created by your administrator.<br/>Access is restricted to Ozzun staff.</div>
     </div>
   </div>
+
+  <script src="assets/firebase-config.js"></script>
+  <script src="assets/firebase-init.js"></script>
+  <script>
+    (function () {
+      const emailEl = document.querySelector('input[type=email]');
+      const passEl  = document.querySelector('input[type=password]');
+      const errEl   = document.getElementById('authErr');
+      const go = () => location.href = 'app.html';
+      const showErr = m => { errEl.textContent = m; errEl.style.display = 'block'; };
+
+      // DEMO mode (no Firebase config yet): clear the pre-filled password and just open the dashboard.
+      if (!(window.FB && window.FB.configured)) {
+        passEl.value = '';
+        document.getElementById('signinBtn').addEventListener('click', go);
+        document.getElementById('googleBtn').addEventListener('click', go);
+        return;
+      }
+      // LIVE mode: real Firebase Authentication.
+      document.getElementById('signinBtn').addEventListener('click', async () => {
+        try { await window.FB.signIn(emailEl.value.trim(), passEl.value); go(); }
+        catch (e) { showErr('Sign in failed. Check your email and password.'); }
+      });
+      document.getElementById('googleBtn').addEventListener('click', async () => {
+        try { await window.FB.signInGoogle(); go(); }
+        catch (e) { showErr('Google sign-in failed or was cancelled.'); }
+      });
+    })();
+  </script>
 </body>
 </html>
