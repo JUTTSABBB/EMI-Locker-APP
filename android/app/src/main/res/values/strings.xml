@@ -15,4 +15,10 @@
 
     <string name="status_locked">Locked · EMI not paid</string>
     <string name="status_locked_detail">Your installment has not been paid. Amount due: PKR %1$d. Pay now to unlock. For help call %2$s.</string>
+    <string name="lock_title">DEVICE LOCKED</string>
+    <string name="lock_message">Your installment (EMI) has not been paid.\nPay now to unlock this phone.</string>
+    <string name="lock_amount_label">AMOUNT DUE</string>
+    <string name="lock_amount">PKR %1$d</string>
+    <string name="lock_pay_refresh">I have paid · Refresh</string>
+    <string name="lock_support">Need help? Call your shop\n%1$s</string>
 </resources>

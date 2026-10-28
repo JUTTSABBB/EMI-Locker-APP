@@ -8,13 +8,20 @@ import android.os.Looper;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+
 import com.ozzun.emilocker.admin.DevicePolicyController;
 import com.ozzun.emilocker.config.DeviceStore;
 import com.ozzun.emilocker.databinding.ActivityMainBinding;
+import com.ozzun.emilocker.lock.CheckinWorker;
+import com.ozzun.emilocker.lock.LockController;
 import com.ozzun.emilocker.net.ServerClient;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Home screen.
@@ -35,7 +42,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        schedulePeriodicCheckin();
         refreshStatus();
+    }
+
+    /** Schedule the background check-in (keeps a locked phone locked / unlocks a paid one). */
+    private void schedulePeriodicCheckin() {
+        PeriodicWorkRequest req = new PeriodicWorkRequest.Builder(
+                CheckinWorker.class, 3, TimeUnit.HOURS)
+                .build();
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+                "emi-checkin", ExistingPeriodicWorkPolicy.KEEP, req);
     }
 
     @Override
@@ -98,7 +115,10 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception ignored) {
                 // Offline: the cached decision + offline-grace policy continue to apply.
             }
-            ui.post(this::refreshStatus);
+            ui.post(() -> {
+                refreshStatus();
+                LockController.enforce(this); // raise the lock screen if the server says locked
+            });
         });
     }
 }

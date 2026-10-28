@@ -3,4 +3,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="ink">#111418</color>
     <color name="muted">#5B6470</color>
+    <color name="lock_bg">#0A0507</color>
+    <color name="lock_accent">#FF5B5C</color>
+    <color name="lock_text">#FFD9D9</color>
+    <color name="lock_muted">#E3B7B8</color>
 </resources>
