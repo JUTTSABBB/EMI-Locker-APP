@@ -7,24 +7,33 @@
 <link rel="stylesheet" href="assets/app.css"/>
 </head>
 <body>
-<div class="app">
+<div class="app" id="app">
+  <div class="overlay" id="overlay"></div>
+
   <!-- Sidebar -->
   <aside class="sidebar">
     <div class="brand">
       <div class="mark">O</div>
       <div><div class="bn">Ozzun</div><div class="bs">EMI Locker</div></div>
     </div>
-    <nav class="nav">
+    <nav class="nav" id="nav">
       <div class="lbl">Main</div>
-      <a data-view="overview" class="active"><span class="ic">▚</span> Overview</a>
-      <a data-view="devices"><span class="ic">▤</span> Devices</a>
-      <a data-view="customers"><span class="ic">◍</span> Customers</a>
+      <a data-view="overview" class="active">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg> Overview</a>
+      <a data-view="devices">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="6" y="2" width="12" height="20" rx="3"/><line x1="10.5" y1="18" x2="13.5" y2="18"/></svg> Devices</a>
+      <a data-view="customers">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M16 5.2a3 3 0 0 1 0 5.6"/><path d="M17.5 14.3A5.5 5.5 0 0 1 20.5 19"/></svg> Customers</a>
       <div class="lbl">Finance</div>
-      <a data-view="payments"><span class="ic">₨</span> Payments</a>
-      <a data-view="reports"><span class="ic">▦</span> Reports</a>
+      <a data-view="payments">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><line x1="2.5" y1="10" x2="21.5" y2="10"/></svg> Payments</a>
+      <a data-view="reports">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><line x1="4" y1="20" x2="4" y2="11"/><line x1="10" y1="20" x2="10" y2="4"/><line x1="16" y1="20" x2="16" y2="14"/><line x1="21" y1="20" x2="3" y2="20"/></svg> Reports</a>
       <div class="lbl">Admin</div>
-      <a data-view="staff"><span class="ic">♟</span> Staff &amp; roles</a>
-      <a data-view="settings"><span class="ic">⚙</span> Settings</a>
+      <a data-view="staff">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 2.5l7 3v5c0 4.5-3 8.5-7 10.5-4-2-7-6-7-10.5v-5z"/><circle cx="12" cy="10" r="2.2"/><path d="M8.6 16a3.6 3.6 0 0 1 6.8 0"/></svg> Staff &amp; roles</a>
+      <a data-view="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.3l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2.2-1.3L14 2h-4l-.3 2.4a7 7 0 0 0-2.2 1.3l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12a7 7 0 0 0 .1 1.3l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2.2 1.3L10 22h4l.3-2.4a7 7 0 0 0 2.2-1.3l2.4 1 2-3.4-2-1.6c.07-.43.1-.86.1-1.3z"/></svg> Settings</a>
     </nav>
     <div class="side-user">
       <div class="av">NA</div>
@@ -35,15 +44,29 @@
   <!-- Main -->
   <div class="main">
     <header class="topbar">
-      <div>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="titlewrap">
         <h1 id="pageTitle">Overview</h1>
         <div class="sub" id="pageSub">Business snapshot · October 2026</div>
       </div>
       <div class="spacer"></div>
-      <div class="range">
-        <button>Today</button><button class="on">This month</button><button>Quarter</button>
+      <div class="search hide-sm">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+        <input placeholder="Search customer, device, CNIC…"/>
       </div>
-      <button class="btn primary">＋ Enroll device</button>
+      <div class="range hide-sm">
+        <button>Today</button><button class="on">Month</button><button>Quarter</button>
+      </div>
+      <button class="iconbtn" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
+        <span class="dot"></span>
+      </button>
+      <button class="btn primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span class="hide-sm">Enroll device</span>
+      </button>
     </header>
 
     <main class="content">
