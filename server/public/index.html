@@ -5,44 +5,66 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>EMI Locker — Shop Dashboard</title>
 <style>
-  :root { --bg:#0f1115; --card:#171a21; --ink:#e7ebf0; --muted:#9aa4b2;
-          --brand:#0B5FFF; --ok:#1DB954; --bad:#ff4d4f; --line:#262b35; }
+  :root { --bg:#0f1115; --card:#171a21; --card2:#1c2029; --ink:#e7ebf0; --muted:#9aa4b2;
+          --brand:#0B5FFF; --ok:#1DB954; --bad:#ff4d4f; --warn:#ffb020; --line:#262b35; }
   * { box-sizing: border-box; }
   body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
          background:var(--bg); color:var(--ink); }
-  header { padding:20px 24px; border-bottom:1px solid var(--line);
-           display:flex; align-items:center; gap:12px; }
-  header .dot { width:12px; height:12px; border-radius:50%; background:var(--brand); }
+  header { padding:18px 24px; border-bottom:1px solid var(--line);
+           display:flex; align-items:center; gap:12px; position:sticky; top:0; background:var(--bg); z-index:5; }
+  header .dot { width:12px; height:12px; border-radius:50%; background:var(--brand); box-shadow:0 0 12px var(--brand); }
   header h1 { font-size:18px; margin:0; }
-  main { max-width:1100px; margin:0 auto; padding:24px 16px; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:14px;
-          padding:18px; margin-bottom:20px; }
-  h2 { font-size:15px; margin:0 0 14px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; }
-  form { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; }
+  header .env { margin-left:auto; font-size:12px; color:var(--muted); border:1px solid var(--line);
+               padding:4px 10px; border-radius:999px; }
+  main { max-width:1180px; margin:0 auto; padding:22px 16px 60px; }
+
+  .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px; }
+  .stat { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px; }
+  .stat .n { font-size:30px; font-weight:800; line-height:1; }
+  .stat .l { font-size:12px; color:var(--muted); margin-top:7px; text-transform:uppercase; letter-spacing:.06em; }
+  .stat.st-ok .n { color:var(--ok); } .stat.st-lock .n { color:var(--bad); } .stat.st-over .n { color:var(--warn); }
+
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; margin-bottom:20px; }
+  h2 { font-size:13px; margin:0 0 14px; color:var(--muted); text-transform:uppercase; letter-spacing:.07em; }
+  form { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px; }
   input { background:#0c0e12; border:1px solid var(--line); color:var(--ink);
-          padding:10px 12px; border-radius:9px; font-size:14px; width:100%; }
-  button { cursor:pointer; border:0; border-radius:9px; padding:10px 14px; font-size:14px; font-weight:600; }
+          padding:11px 12px; border-radius:10px; font-size:14px; width:100%; }
+  input:focus { outline:none; border-color:var(--brand); }
+  button { cursor:pointer; border:0; border-radius:10px; padding:11px 14px; font-size:14px; font-weight:600; }
   .primary { background:var(--brand); color:#fff; }
-  .mini { padding:7px 10px; font-size:12px; }
+  .mini { padding:7px 11px; font-size:12px; }
   .lock { background:var(--bad); color:#fff; }
   .unlock { background:var(--ok); color:#07210f; }
-  .paid { background:#243; color:#bfe; }
+  .paid { background:#243043; color:#bcd2ff; }
   table { width:100%; border-collapse:collapse; font-size:14px; }
-  th, td { text-align:left; padding:11px 10px; border-bottom:1px solid var(--line); vertical-align:middle; }
-  th { color:var(--muted); font-weight:600; font-size:12px; text-transform:uppercase; }
-  .badge { padding:3px 9px; border-radius:999px; font-size:12px; font-weight:700; }
-  .b-locked { background:rgba(255,77,79,.15); color:#ff8f90; }
-  .b-ok { background:rgba(29,185,84,.15); color:#5fe08a; }
+  th, td { text-align:left; padding:12px 10px; border-bottom:1px solid var(--line); vertical-align:middle; }
+  th { color:var(--muted); font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
+  tr.row-locked { background:rgba(255,77,79,.06); }
+  tr.row-over   { background:rgba(255,176,32,.06); }
+  .mono { font-variant-numeric:tabular-nums; }
+  .badge { padding:4px 10px; border-radius:999px; font-size:12px; font-weight:800; white-space:nowrap; }
+  .b-locked { background:rgba(255,77,79,.16); color:#ff8f90; }
+  .b-over   { background:rgba(255,176,32,.16); color:#ffcf7a; }
+  .b-ok     { background:rgba(29,185,84,.16); color:#5fe08a; }
   .row-actions { display:flex; gap:6px; flex-wrap:wrap; }
-  .hint { color:var(--muted); font-size:13px; margin-top:6px; }
+  .hint { color:var(--muted); font-size:13px; margin-top:8px; }
+  .cust-sub { color:var(--muted); font-size:12px; }
 </style>
 </head>
 <body>
 <header>
   <span class="dot"></span>
   <h1>EMI Locker · Shop Dashboard</h1>
+  <span class="env">localhost:4000 · demo</span>
 </header>
 <main>
+  <div class="stats" id="stats">
+    <div class="stat"><div class="n" id="s-total">0</div><div class="l">Total devices</div></div>
+    <div class="stat st-ok"><div class="n" id="s-active">0</div><div class="l">Active</div></div>
+    <div class="stat st-lock"><div class="n" id="s-locked">0</div><div class="l">Locked</div></div>
+    <div class="stat st-over"><div class="n" id="s-over">0</div><div class="l">Overdue</div></div>
+  </div>
+
   <div class="card">
     <h2>Enroll a device (point of sale)</h2>
     <form id="enrollForm">
@@ -54,7 +76,7 @@
       <input name="paid_until" placeholder="Paid until (YYYY-MM-DD)" />
       <button class="primary" type="submit">Enroll</button>
     </form>
-    <div class="hint">The customer consents to this enrollment at purchase. CNIC is kept as the KYC/consent record.</div>
+    <div class="hint">The customer consents to this enrollment at purchase. CNIC is kept as the KYC / consent record.</div>
   </div>
 
   <div class="card">
@@ -69,27 +91,51 @@
 </main>
 
 <script>
+function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function isOverdue(d){ return d.paid_until && new Date(d.paid_until) < new Date(); }
+
 async function load() {
   const res = await fetch('/api/devices');
   const devices = await res.json();
+
+  // stats: LOCKED = manually locked by shop; OVERDUE = payment date passed (auto-lock); ACTIVE = rest
+  let active=0, locked=0, over=0;
+  devices.forEach(d => {
+    if (d.lock_state === 'LOCKED') locked++;
+    else if (isOverdue(d)) over++;
+    else active++;
+  });
+  document.getElementById('s-total').textContent  = devices.length;
+  document.getElementById('s-active').textContent = active;
+  document.getElementById('s-locked').textContent = locked;
+  document.getElementById('s-over').textContent   = over;
+
   const tbody = document.getElementById('deviceRows');
   if (!devices.length) { tbody.innerHTML = '<tr><td colspan="7" class="hint">No devices yet. Enroll one above.</td></tr>'; return; }
-  tbody.innerHTML = devices.map(d => `
-    <tr>
-      <td>${esc(d.device_id)}</td>
-      <td>${esc(d.customer_name)}</td>
+
+  tbody.innerHTML = devices.map(d => {
+    const overdue = isOverdue(d);
+    const manualLock = d.lock_state === 'LOCKED';
+    const rowCls = manualLock ? 'row-locked' : (overdue ? 'row-over' : '');
+    const badge = manualLock
+        ? '<span class="badge b-locked">LOCKED</span>'
+        : (overdue ? '<span class="badge b-over">OVERDUE</span>' : '<span class="badge b-ok">ACTIVE</span>');
+    return `
+    <tr class="${rowCls}">
+      <td class="mono">${esc(d.device_id)}</td>
+      <td>${esc(d.customer_name)}<div class="cust-sub">CNIC ${esc(d.cnic)}</div></td>
       <td>${esc(d.plan)}</td>
-      <td>${esc(d.paid_until || '—')}</td>
-      <td><span class="badge ${d.effective_locked ? 'b-locked' : 'b-ok'}">${d.effective_locked ? 'LOCKED' : 'ACTIVE'}</span></td>
-      <td class="hint">${esc(d.last_checkin || 'never')}</td>
+      <td class="mono">${esc(d.paid_until || '—')}</td>
+      <td>${badge}</td>
+      <td class="hint mono">${esc(d.last_checkin || 'never')}</td>
       <td class="row-actions">
         <button class="mini lock"   onclick="act('${esc(d.device_id)}','lock')">Lock</button>
         <button class="mini unlock" onclick="act('${esc(d.device_id)}','unlock')">Unlock</button>
         <button class="mini paid"   onclick="markPaid('${esc(d.device_id)}')">Mark paid</button>
       </td>
-    </tr>`).join('');
+    </tr>`;
+  }).join('');
 }
-function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 async function act(id, what) {
   await fetch(`/api/devices/${encodeURIComponent(id)}/${what}`, { method:'POST' });
   load();
