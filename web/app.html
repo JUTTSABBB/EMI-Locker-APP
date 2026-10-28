@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Ozzun EMI Locker — Dashboard</title>
+<link rel="stylesheet" href="assets/app.css"/>
+</head>
+<body>
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="mark">O</div>
+      <div><div class="bn">Ozzun</div><div class="bs">EMI Locker</div></div>
+    </div>
+    <nav class="nav">
+      <div class="lbl">Main</div>
+      <a data-view="overview" class="active"><span class="ic">▚</span> Overview</a>
+      <a data-view="devices"><span class="ic">▤</span> Devices</a>
+      <a data-view="customers"><span class="ic">◍</span> Customers</a>
+      <div class="lbl">Finance</div>
+      <a data-view="payments"><span class="ic">₨</span> Payments</a>
+      <a data-view="reports"><span class="ic">▦</span> Reports</a>
+      <div class="lbl">Admin</div>
+      <a data-view="staff"><span class="ic">♟</span> Staff &amp; roles</a>
+      <a data-view="settings"><span class="ic">⚙</span> Settings</a>
+    </nav>
+    <div class="side-user">
+      <div class="av">NA</div>
+      <div><div class="nm">Nadeem</div><div class="rl">Administrator</div></div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <header class="topbar">
+      <div>
+        <h1 id="pageTitle">Overview</h1>
+        <div class="sub" id="pageSub">Business snapshot · October 2026</div>
+      </div>
+      <div class="spacer"></div>
+      <div class="range">
+        <button>Today</button><button class="on">This month</button><button>Quarter</button>
+      </div>
+      <button class="btn primary">＋ Enroll device</button>
+    </header>
+
+    <main class="content">
+      <section id="view-overview" class="view active"></section>
+      <section id="view-devices" class="view"></section>
+      <section id="view-staff" class="view"></section>
+      <section id="view-generic" class="view"></section>
+    </main>
+  </div>
+</div>
+
+<div class="bar-tip" id="tip"></div>
+
+<script src="assets/mock.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
