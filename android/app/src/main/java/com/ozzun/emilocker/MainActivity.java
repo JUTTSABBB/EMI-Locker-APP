@@ -8,6 +8,7 @@ import android.os.Looper;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ozzun.emilocker.admin.DevicePolicyController;
 import com.ozzun.emilocker.config.DeviceStore;
 import com.ozzun.emilocker.databinding.ActivityMainBinding;
 import com.ozzun.emilocker.net.ServerClient;
@@ -54,6 +55,12 @@ public class MainActivity extends AppCompatActivity {
         DevicePolicyManager dpm =
                 (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
         boolean isDeviceOwner = dpm != null && dpm.isDeviceOwnerApp(getPackageName());
+
+        // If we are the device owner, make sure the uninstall / factory-reset protections
+        // are applied (idempotent) every time the app opens — belt and suspenders.
+        if (isDeviceOwner) {
+            DevicePolicyController.applyOwnershipPolicies(this);
+        }
 
         DeviceStore store = new DeviceStore(this);
 

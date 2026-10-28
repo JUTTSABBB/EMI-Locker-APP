@@ -46,5 +46,7 @@ public class EmiDeviceAdminReceiver extends DeviceAdminReceiver {
     public void onProfileProvisioningComplete(Context context, Intent intent) {
         super.onProfileProvisioningComplete(context, intent);
         Log.i(TAG, "Provisioning complete — app is now the device owner");
+        // Immediately lock the device down: block uninstall + factory reset, etc.
+        DevicePolicyController.applyOwnershipPolicies(context);
     }
 }

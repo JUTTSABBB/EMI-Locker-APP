@@ -4,8 +4,8 @@
     <string name="admin_label">EMI Locker Device Control</string>
     <string name="admin_description">Required to enforce the installment plan agreed at purchase.</string>
 
-    <string name="status_device_owner">Active · Device Owner</string>
-    <string name="status_device_owner_detail">This phone is enrolled in an installment plan. The app is the device owner and is working normally.</string>
+    <string name="status_device_owner">Active · Protected</string>
+    <string name="status_device_owner_detail">This phone is enrolled in an installment plan. Device protection is active: this app cannot be uninstalled and the phone cannot be factory reset until the plan is cleared.</string>
 
     <string name="status_not_owner">Not enrolled yet</string>
     <string name="status_not_owner_detail">This app is installed but is not yet the device owner. Enrollment is done by the shop during phone setup (QR provisioning).</string>
